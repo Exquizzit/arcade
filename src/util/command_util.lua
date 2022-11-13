@@ -1,7 +1,9 @@
+require('src.util.string_util')
+
 function message_to_command(message)
     local message_components = {}
 
-    if not message[0] == PREFIX then return "Not a valid command" end
+    if not message:character_at(1) == PREFIX then return "Not a valid command" end
 
     -- '!test a b c' -> 'test a b c'
     message = string.sub(message, 2, #message)
@@ -21,4 +23,8 @@ function message_to_command(message)
     until false
 
     return message_components
+end
+
+function execute_command(command, sender, ...)
+    
 end
