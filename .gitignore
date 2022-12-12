@@ -1,4 +1,5 @@
-bot/
+bot/token.txt
+
 .vscode/
 
 *.log
