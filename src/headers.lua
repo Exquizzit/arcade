@@ -6,5 +6,9 @@ _G.TOKEN = tokenFile:read('*a')
 
 PREFIX = "!"
 
-require('src.util.command_util') -- string util is required here
-require('src.util.table_util')
+-- Util
+require('src.util.file_util')
+require_in_directory('src.util', { "file_util", "table_util"})
+
+-- Managers
+require_in_directory('src.modules')

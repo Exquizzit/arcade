@@ -1,5 +1,4 @@
 luaunit = require('src.lib.luaunit')
-require('src.util.command_util')
 
 function test_MessageToCommand()
     local message = "!test a b c"

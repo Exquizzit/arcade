@@ -1,10 +1,15 @@
-# Discord Bot
+<h1 align="center">
+Ace, the Discord Bot
+</h1>
+<p align="center">
+<a href="##Overview">Overview</a>
+·
+<a href="##Development">Development</a>
+</p>
 
-A simple fun little bot for discord servers made with Discordia.
+## Overview
+Ace is was developed to be a fun little companion for you in your discord server. Mainly for entertainment purposes, not a utility bot like [MEE6](https://mee6.xyz/).
 
-## Goals
+## Development
 
-* A Rock-Paper-Scissors game
-* A Tic-Tac-Toe game
-* Other minigames
-* Some ease-of-access commands
+Ace is being built with [Discordia](https://github.com/SinisterRectus/Discordia), a lua-implementation of Discord's bot APIs. For testing, I am using [luaunit](https://github.com/bluebird75/luaunit).

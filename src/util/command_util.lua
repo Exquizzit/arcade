@@ -1,5 +1,5 @@
-require('src.util.string_util')
-
+---@param message string The content of the message
+---@return string | table command The parsed message where table[1] is the command name, string if error
 function message_to_command(message)
     local message_components = {}
 
@@ -23,8 +23,4 @@ function message_to_command(message)
     until false
 
     return message_components
-end
-
-function execute_command(command, sender, ...)
-    
 end

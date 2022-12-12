@@ -1,7 +1,6 @@
 _G.discordia = require('discordia')
+_G.client = discordia.Client()
 require('src.headers')
-
-local client = discordia.Client()
 
 client:on('ready', function()
 	print('Logged in as '.. client.user.username)
@@ -12,10 +11,14 @@ client:on('messageCreate', function(message)
 
     if (message.content:character_at(1) ~= PREFIX) then return end
 
+    ---@type table|string
     local message_as_command = message_to_command(message.content)
     if type(message_as_command) == "table" then
-        message.channel:broadcastTyping()
-        return
+        ---@cast message_as_command table
+        execute_command(message_as_command, message.author, message)
+    else
+        ---@cast message_as_command string
+        warn(message_as_command)
     end
 end)
 
