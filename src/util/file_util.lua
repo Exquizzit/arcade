@@ -20,7 +20,7 @@ function require_in_directory(directory_path, except)
 
         if except ~= nil and (table.find(except, filename_without_dotlua) ~= -1)  then goto continue end
 
-        require(directory_path .. "." .. filename_without_dotlua)
+        require(directory_path .. "/" .. filename_without_dotlua)
         ::continue::
     end
 end

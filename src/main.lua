@@ -1,6 +1,6 @@
 _G.discordia = require('discordia')
 _G.client = discordia.Client()
-require('src.headers')
+require('./headers')
 
 client:on('ready', function()
 	print('Logged in as '.. client.user.username)

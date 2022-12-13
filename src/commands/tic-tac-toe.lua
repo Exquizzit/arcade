@@ -20,13 +20,17 @@ cmd.triggered = function(message)
     local user1 = message.author
     local user2 = user_mention_to_user(message_as_command[2])
 
+    if user2 == "not a user mention" or user2 == "nil user" or user2.bot then message:reply("Invalid player") return end
+    ---@cast user2 table
+
+    -- Make sure both players are available
     if is_player_in_game(user1) then message:reply("You are already in a game!") return end
     if is_player_in_game(user2) then message:reply("Your opponent is already in a game!") return end
 
     -- Make sure the user doesn't put themselves as their opponent
     if user1.id == user2.id then message:reply("You can't play a game with yourself!") return end
 
-    local reply_instance = message.channel:send(tiles_to_message(tiles, "\n<@" .. user1.id .. ">'s Turn"))
+    local reply_instance = message.channel:send(tiles_to_message(user1, user2, tiles, "\n<@" .. user1.id .. ">'s Turn"))
     
     local game = TicTacToeGame(user1, user2, reply_instance)
     table.insert(tic_tac_toe_current_games, game)
@@ -38,6 +42,8 @@ cmd.triggered = function(message)
             end)()
         end
     end)()
+
+    game:check_afk()
 end
 
 client:on('reactionAdd', function(reaction, userId)
@@ -70,7 +76,7 @@ client:on('reactionAdd', function(reaction, userId)
     local number_of_tile = table.find(tiles, reaction.emojiHash)
 
     local new_tiles = game_reacted_to.tiles
-    new_tiles[number_of_tile] = (user_index == 1) and "❌" or "⭕"
+    new_tiles[number_of_tile] = player_index_to_emoji(user_index)
     game_reacted_to:update(new_tiles)
 
     reaction:delete(userId)

@@ -1,5 +1,3 @@
-require('src.util.file_util')
-
 local all_commands = {}
 
 -- Read in all files
@@ -7,7 +5,7 @@ for i, filename in ipairs(scandir("src/commands")) do
     if filename ~= "base-command.lua" then
         local j, k = string.find(filename, ".lua")
         local actual_name = string.sub(filename, 1, j - 1)
-        table.insert(all_commands, require('src.commands.' .. actual_name))
+        table.insert(all_commands, require('./../commands/' .. actual_name))
     end
 end
 

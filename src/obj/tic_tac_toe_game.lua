@@ -13,6 +13,9 @@ function TicTacToeGame:__init(user1, user2, message)
         "7️⃣", "8️⃣", "9️⃣"
     }
     self._turn = 1
+    self._turns = 0
+
+    self._afk_clock = Clock()
 end
 
 ---@param user table | string
@@ -26,9 +29,49 @@ function TicTacToeGame:is_user_in_game(user)
 end
 
 function TicTacToeGame:update(new_tiles)
+    self._tiles = new_tiles
     self._turn = (self._turn == 1) and 2 or 1
+    self._turns = self._turns + 1
+    self._afk_clock:emit("afk_check")
 
-    self._message:setContent(tiles_to_message(new_tiles, "\n<@" .. ((self._turn == 1) and self._user1.id or self._user2.id) .. ">'s Turn"))
+    local end_result = check_tiles_for_end(self._tiles)
+
+    if end_result == "continue" then 
+        self._message:setContent(tiles_to_message(self._user1, self._user2, new_tiles, "\n<@" .. ((self._turn == 1) and self._user1.id or self._user2.id) .. ">'s Turn"))
+    else
+        self:finish(end_result)
+    end
+end
+
+---@param result string
+function TicTacToeGame:finish(result)
+    print("Game ended with result of: " .. result)
+
+    if result == "draw" then self._message:setContent(tiles_to_message(self._user1, self._user2, self._tiles, "\nGame ended in a **draw**!")) return end
+
+    local user_mention = user_to_mention(((result == "winner player1") and self._user1 or self._user2))
+    self._message:setContent(tiles_to_message(self._user1, self._user2, self._tiles, "\nGame over! " .. user_mention .. " won!")) 
+
+    table.remove(tic_tac_toe_current_games, table.find(tic_tac_toe_current_games, self))
+
+
+    self._message:clearReactions()
+end
+
+function TicTacToeGame:check_afk()
+    coroutine.wrap(function()
+        local original_turns = self._turns
+        print("orignal turns: " .. tostring(original_turns))
+        self._afk_clock:waitFor("afk_check", 5000)
+
+        local new_turns = self._turns
+        print("new turns: " .. new_turns)
+        if new_turns == original_turns then
+            print("Opponent AFK")
+        else
+            print("Opponent not AFK")
+        end
+    end)()
 end
 
 function get.user1(self)
@@ -45,6 +88,9 @@ function get.tiles(self)
 end
 function get.turn(self)
     return self._turn
+end
+function get.turns(self)
+    return self._turns
 end
 
 function set.tiles(self, new_tiles)

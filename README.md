@@ -3,7 +3,7 @@
 ___
 <center>
 <p>
-<h2>
+<h3>
 <a href="#Introduction">Introduction</a>
 ・
 <a href="#Installation and Use">Installation and Use</a>
